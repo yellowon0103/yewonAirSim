@@ -1,6 +1,11 @@
 ﻿using AirSimUnity.CarStructs;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.AI;
+
+//예원추가
+using Debug = UnityEngine.Debug;
+//
 
 namespace AirSimUnity
 {
@@ -10,8 +15,8 @@ namespace AirSimUnity
      * The car can be controlled either through keyboard or through client api calls.
      * This class holds the current car state and data for client to query at any point of time.
      */
-    [RequireComponent(typeof(AirSimCarController))]
 
+    [RequireComponent(typeof(AirSimCarController))]
     //22.08.17 나영 추가
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(LineRenderer))]
@@ -46,7 +51,6 @@ namespace AirSimUnity
 
             //22.08.26 나영추가 아두이노 매니저 할당
             //arduino = FindObjectOfType<ArduinoManager>();
-            //
 
         }
 
@@ -70,6 +74,7 @@ namespace AirSimUnity
 
             path = new NavMeshPath();
             //
+
 
         }
 
@@ -132,6 +137,7 @@ namespace AirSimUnity
 
                         //arduino.Angle(10); //아두이노에 몇도 회전할지 전달
                         //
+
                         steering = Input.GetAxis("Horizontal");
                         throttle = Input.GetAxis("Vertical");
                         handBrake = Input.GetAxis("Jump");
@@ -199,6 +205,5 @@ namespace AirSimUnity
                 }
             }
         }
-        //
     }
 }
