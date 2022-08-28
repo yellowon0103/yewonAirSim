@@ -1,4 +1,5 @@
 ﻿using AirSimUnity.CarStructs;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace AirSimUnity
@@ -10,9 +11,26 @@ namespace AirSimUnity
      * This class holds the current car state and data for client to query at any point of time.
      */
     [RequireComponent(typeof(AirSimCarController))]
+
+    //22.08.17 나영 추가
+    [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(LineRenderer))]
+    //
+
     public class Car : Vehicle
     {
         private AirSimCarController carController;
+
+        //22.08.17 나영 추가
+        private NavMeshAgent agent;
+        private LineRenderer lineRenderer;
+
+        private NavMeshPath path;
+        private Vector3 targetPosition;
+        //
+        //22.08.24
+        //private ArduinoManager arduino;
+        //
 
         private CarControls carControls;
         private CarState carState;
@@ -25,12 +43,33 @@ namespace AirSimUnity
         private void Awake()
         {
             rigidBody = GetComponent(type: typeof(Rigidbody)) as Rigidbody;
+
+            //22.08.26 나영추가 아두이노 매니저 할당
+            //arduino = FindObjectOfType<ArduinoManager>();
+            //
+
         }
 
         private new void Start()
         {
             base.Start();
             carController = GetComponent<AirSimCarController>();
+
+            //22.08.17 나영 추가
+            agent = GetComponent<NavMeshAgent>();
+            lineRenderer = GetComponent<LineRenderer>();
+
+            agent.updatePosition = false;
+            agent.updateRotation = false;
+
+            lineRenderer.startWidth = 0.15f;
+            lineRenderer.endWidth = 0.15f;
+            lineRenderer.positionCount = 0;
+
+            agent = GetComponent<NavMeshAgent>();
+
+            path = new NavMeshPath();
+            //
 
         }
 
@@ -71,6 +110,28 @@ namespace AirSimUnity
                     }
                     else
                     {
+                        //22.08.17 나영 추가
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                            RaycastHit hit;
+
+                            if (Physics.Raycast(ray, out hit))
+                            {
+                                targetPosition = hit.point;
+                                agent.CalculatePath(targetPosition, path);
+                            }
+
+                            Debug.Log(targetPosition);
+                        }
+
+                        agent.CalculatePath(targetPosition, path);
+
+                        if (path.corners.Length > 1)
+                            DrawPath();
+
+                        //arduino.Angle(10); //아두이노에 몇도 회전할지 전달
+                        //
                         steering = Input.GetAxis("Horizontal");
                         throttle = Input.GetAxis("Vertical");
                         handBrake = Input.GetAxis("Jump");
@@ -120,5 +181,24 @@ namespace AirSimUnity
         {
             return rigidBody != null ? new AirSimVector(rigidBody.velocity.x, rigidBody.velocity.y, rigidBody.velocity.z) : new AirSimVector(0f, 0f, 0f);
         }
+
+        //22.08.17 나영 추가
+        void DrawPath()
+        {
+            lineRenderer.positionCount = path.corners.Length;
+            lineRenderer.SetPosition(0, transform.position);
+
+            if (path.corners.Length < 2)
+                return;
+            else
+            {
+                for (int i = 1; i < path.corners.Length; i++)
+                {
+                    Vector3 pointPosition = new Vector3(path.corners[i].x, path.corners[i].y, path.corners[i].z);
+                    lineRenderer.SetPosition(i, pointPosition);
+                }
+            }
+        }
+        //
     }
 }
