@@ -1,4 +1,5 @@
 ﻿using AirSimUnity.CarStructs;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -22,6 +23,8 @@ namespace AirSimUnity
     [RequireComponent(typeof(LineRenderer))]
     //
 
+
+
     public class Car : Vehicle
     {
         private AirSimCarController carController;
@@ -44,6 +47,8 @@ namespace AirSimUnity
         private float steering, throttle, footBreak, handBrake;
 
         private Rigidbody rigidBody;
+
+        
 
         private void Awake()
         {
@@ -75,11 +80,18 @@ namespace AirSimUnity
             path = new NavMeshPath();
             //
 
+            //22.08.29 예원 추가
+            targetPosition.x = 0;
+            targetPosition.y = 0;
+            targetPosition.z = 0;
+            //
+
 
         }
 
         private new void FixedUpdate()
         {
+
             if (isServerStarted)
             {
                 if (resetVehicle)
@@ -116,6 +128,7 @@ namespace AirSimUnity
                     else
                     {
                         //22.08.17 나영 추가
+                        /*
                         if (Input.GetMouseButtonDown(0))
                         {
                             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -129,6 +142,53 @@ namespace AirSimUnity
 
                             Debug.Log(targetPosition);
                         }
+                        */
+
+
+
+                        // 22.08.29 예원 추가
+
+                        // 소수점 뒤에는 f를 붙여야 오류가 안남
+                        //targetPosition.x = -240;
+                        //targetPosition.y = 0.3f;
+                        //targetPosition.z = 34;
+
+
+                        //if (! GameObject.Find("MapRawImage") )
+
+                        //22.08.29 예원 추가 
+                        if (GameObject.Find("MapRawImage"))
+                        {
+                            MapClick mapclick = GameObject.Find("MapRawImage").GetComponent<MapClick>();
+
+
+                            Vector3 test;
+                            test.x = mapclick.panelMapX * 2.25f;
+                            test.y = 0.3f;
+                            test.z = mapclick.panelMapY * 2.25f;
+                            Debug.Log("테스트 + " + test);
+
+                            Ray ray = Camera.main.ScreenPointToRay(test);
+                            RaycastHit hit;
+
+                            if (Physics.Raycast(ray, out hit))
+                            {
+                                targetPosition = hit.point;
+
+                                //
+                                targetPosition.x = mapclick.panelMapX * 2.25f;
+                                targetPosition.y = 0.3f;
+                                targetPosition.z = mapclick.panelMapY * 2.25f;
+                                //
+
+                                agent.CalculatePath(targetPosition, path);
+                            }
+                        }
+
+                        Debug.Log("타겟 + " + targetPosition);
+                        
+                        // 예원 추가 여기까지
+                        
 
                         agent.CalculatePath(targetPosition, path);
 
