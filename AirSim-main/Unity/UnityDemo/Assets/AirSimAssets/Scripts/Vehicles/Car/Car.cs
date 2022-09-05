@@ -81,8 +81,8 @@ namespace AirSimUnity
             //
 
             //22.08.29 예원 추가
-            targetPosition.x = 0;
-            targetPosition.y = 0;
+            targetPosition.x = -7.3f;
+            targetPosition.y = 1;
             targetPosition.z = 0;
             //
 
@@ -163,9 +163,9 @@ namespace AirSimUnity
 
 
                             Vector3 test;
-                            test.x = mapclick.panelMapX * 2.25f;
-                            test.y = 0.3f;
-                            test.z = mapclick.panelMapY * 2.25f;
+                            test.x = mapclick.panelMapX * 0.5f;
+                            test.y = 1;
+                            test.z = mapclick.panelMapY * 0.5f;
                             Debug.Log("테스트 + " + test);
 
                             Ray ray = Camera.main.ScreenPointToRay(test);
@@ -176,9 +176,9 @@ namespace AirSimUnity
                                 targetPosition = hit.point;
 
                                 //
-                                targetPosition.x = mapclick.panelMapX * 2.25f;
-                                targetPosition.y = 0.3f;
-                                targetPosition.z = mapclick.panelMapY * 2.25f;
+                                targetPosition.x = mapclick.panelMapX * 0.5f;
+                                targetPosition.y = 1;
+                                targetPosition.z = mapclick.panelMapY * 0.5f;
                                 //
 
                                 agent.CalculatePath(targetPosition, path);
