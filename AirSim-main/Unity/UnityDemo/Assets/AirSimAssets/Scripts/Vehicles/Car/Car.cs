@@ -38,7 +38,7 @@ namespace AirSimUnity
         private Vector3 targetPosition;
         //
         //22.08.24
-        //private ArduinoManager arduino;
+        private ArduinoManager arduino;
         //
 
         private CarControls carControls;
@@ -56,7 +56,7 @@ namespace AirSimUnity
             rigidBody = GetComponent(type: typeof(Rigidbody)) as Rigidbody;
 
             //22.08.26 나영추가 아두이노 매니저 할당
-            //arduino = FindObjectOfType<ArduinoManager>();
+            arduino = FindObjectOfType<ArduinoManager>();
 
         }
 
@@ -196,7 +196,7 @@ namespace AirSimUnity
                         if (path.corners.Length > 1)
                             DrawPath();
 
-                        //arduino.Angle(10); //아두이노에 몇도 회전할지 전달
+                        arduino.Angle(10); //아두이노에 몇도 회전할지 전달
                         //
 
                         steering = Input.GetAxis("Horizontal");
