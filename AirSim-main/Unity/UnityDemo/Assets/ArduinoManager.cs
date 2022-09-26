@@ -14,7 +14,7 @@ public class ArduinoManager : MonoBehaviour
 
     void Start()
     {
-        serial = new SerialPort("COM11", 9600);
+        serial = new SerialPort("COM3", 9600);
         serial.Open();
     }
 
@@ -25,13 +25,20 @@ public class ArduinoManager : MonoBehaviour
 
     public void Angle(float angle)
     {
-        if (angle > 1)
+        if (angle == 10 )
+        {
+            Debug.Log(angle);
+            serial.Write(angle.ToString());
+        }
+
+        if (angle == 20)
         {
             Debug.Log(angle);
             serial.Write(angle.ToString());
         }
     }
 
+    /*
     void Update()
     {
         //  다 계속 주석
@@ -47,4 +54,5 @@ public class ArduinoManager : MonoBehaviour
         //	serial.Write("2");
         //}
     }
+    */
 }

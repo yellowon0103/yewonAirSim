@@ -196,7 +196,7 @@ namespace AirSimUnity
                         if (path.corners.Length > 1)
                             DrawPath();
 
-                        arduino.Angle(10); //아두이노에 몇도 회전할지 전달
+                        //arduino.Angle(10); //아두이노에 몇도 회전할지 전달
                         //
 
                         steering = Input.GetAxis("Horizontal");
@@ -265,6 +265,25 @@ namespace AirSimUnity
                     lineRenderer.SetPosition(i, pointPosition);
                 }
             }
+
+            
+        }
+
+        void Update()
+        {
+            //22.09.26 예원 추가
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                Debug.Log("으아아아아ㅏㅇㄱ");
+                arduino.Angle(10);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                Debug.Log("으아아아아ㅏㅇㄱ");
+                arduino.Angle(20);
+            }
+            //
         }
     }
 }
