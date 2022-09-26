@@ -24,28 +24,27 @@ Serial.begin(9600);
 }
 
 void loop() {
-  if(Serial.available() || value == 10)
+  if(Serial.available())
   {
     String data = Serial.readString();
     value= data.toFloat();
-    if( value == 10 )
-    {
-      servo.attach(servoPin);
+    servo.detach();
+  }
+
+  if( value == 10)
+  {
+    servo.attach(servoPin);
         for (pos = 31; pos <= 149; pos += 1) { 
         servo.write(pos);              
-        delay(15);                      
+        delay(5);                      
           }
          for (pos = 149; pos >= 31; pos -= 1) { 
           servo.write(pos);           
-           delay(15);                       
+           delay(5);                       
            }
-    }
-
-    if ( value == 20)
-    {
-      servo.detach();
-    }
-  }}
+  }
+  
+}
 /*
   if(Serial.available())
   {
